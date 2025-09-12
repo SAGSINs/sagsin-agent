@@ -8,6 +8,7 @@ from typing import AsyncGenerator
 
 import psutil
 import grpc
+import uuid
 
 try:
     from . import monitor_pb2, monitor_pb2_grpc
@@ -17,7 +18,7 @@ except ImportError:
 
 # Configuration từ environment variables
 GRPC_TARGET = os.getenv("GRPC_TARGET", "localhost:50051")
-NODE_ID = os.getenv("NODE_ID", socket.gethostname())
+NODE_ID = os.getenv("NODE_ID") or str(uuid.uuid4())
 INTERVAL_SEC = float(os.getenv("INTERVAL_SEC", "5.0"))
 RETRY_BACKOFF_SEC = float(os.getenv("RETRY_BACKOFF_SEC", "2.0"))
 MAX_BACKOFF_SEC = float(os.getenv("MAX_BACKOFF_SEC", "60.0"))
