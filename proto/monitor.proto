@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package monitor;
+
+service NodeMonitor {
+  rpc Heartbeat (stream HeartbeatRequest) returns (HeartbeatResponse);
+}
+
+message HeartbeatRequest {
+  string node_id = 1;
+  int64 timestampMs = 2;
+  string ip = 3;
+  string hostname = 4;
+}
+
+message HeartbeatResponse {
+  bool success = 1;
+  string message = 2;
+}

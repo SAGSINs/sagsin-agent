@@ -1,0 +1,16 @@
+# Dockerignore for better build performance
+.git
+.github
+.venv
+*.log
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache
+.coverage
+.env
+*.env
+README.md
+.gitignore
+run_agent.bat
