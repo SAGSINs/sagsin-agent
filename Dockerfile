@@ -21,6 +21,13 @@ FROM python:3.11-slim as production
 # Set working directory
 WORKDIR /app
 
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    iputils-ping \
+    iproute2 \
+    net-tools \
+    iperf3 \
+    dnsutils \
+ && rm -rf /var/lib/apt/lists/*
 # Copy Python packages from builder
 COPY --from=builder /root/.local /root/.local
 
@@ -33,13 +40,17 @@ COPY proto/ ./proto/
 # Copy application code
 COPY agent/ ./agent/
 
+# Create topology directory for mounting
+RUN mkdir -p /topology
+
 # Set environment variables with defaults
 ENV GRPC_TARGET=192.168.100.10:50051
 ENV INTERVAL_SEC=5
 ENV RETRY_BACKOFF_SEC=2
 ENV MAX_BACKOFF_SEC=30
+ENV TOPOLOGY_FILE=/topology/topology.json
 
-# Expose gRPC port
+# Expose gRPC port (not strictly needed for agent, but ok)
 EXPOSE 50051
 
 # Run the application
