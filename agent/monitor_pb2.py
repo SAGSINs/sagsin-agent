@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rmonitor.proto\x12\x07monitor\"V\n\x10HeartbeatRequest\x12\x0f\n\x07node_id\x18\x01 \x01(\t\x12\x13\n\x0btimestampMs\x18\x02 \x01(\x03\x12\n\n\x02ip\x18\x03 \x01(\t\x12\x10\n\x08hostname\x18\x04 \x01(\t\"5\n\x11HeartbeatResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t2S\n\x0bNodeMonitor\x12\x44\n\tHeartbeat\x12\x19.monitor.HeartbeatRequest\x1a\x1a.monitor.HeartbeatResponse(\x01\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rmonitor.proto\x12\x07monitor\"0\n\x10HeartbeatRequest\x12\n\n\x02ip\x18\x01 \x01(\t\x12\x10\n\x08hostname\x18\x02 \x01(\t\"5\n\x11HeartbeatResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t2S\n\x0bNodeMonitor\x12\x44\n\tHeartbeat\x12\x19.monitor.HeartbeatRequest\x1a\x1a.monitor.HeartbeatResponse(\x01\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -32,9 +32,9 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'monitor_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
   _globals['_HEARTBEATREQUEST']._serialized_start=26
-  _globals['_HEARTBEATREQUEST']._serialized_end=112
-  _globals['_HEARTBEATRESPONSE']._serialized_start=114
-  _globals['_HEARTBEATRESPONSE']._serialized_end=167
-  _globals['_NODEMONITOR']._serialized_start=169
-  _globals['_NODEMONITOR']._serialized_end=252
+  _globals['_HEARTBEATREQUEST']._serialized_end=74
+  _globals['_HEARTBEATRESPONSE']._serialized_start=76
+  _globals['_HEARTBEATRESPONSE']._serialized_end=129
+  _globals['_NODEMONITOR']._serialized_start=131
+  _globals['_NODEMONITOR']._serialized_end=214
 # @@protoc_insertion_point(module_scope)

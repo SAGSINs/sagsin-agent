@@ -15,6 +15,7 @@ except ImportError:
 # Config
 GRPC_TARGET = os.getenv("GRPC_TARGET", "localhost:50051")
 INTERVAL_SEC = float(os.getenv("INTERVAL_SEC", "5.0"))
+HOST_NAME = os.getenv("HOST_NAME") or "unknown"
 
 def get_local_ip() -> str:
     try:
@@ -27,12 +28,11 @@ def get_local_ip() -> str:
 
 async def heartbeat_generator(stop_event: asyncio.Event) -> AsyncGenerator[monitor_pb2.HeartbeatRequest, None]:
     local_ip = get_local_ip()
-    hostname = socket.gethostname()
 
     while not stop_event.is_set():
         yield monitor_pb2.HeartbeatRequest(
             ip=local_ip,
-            hostname=hostname
+            hostname=HOST_NAME,
         )
         await asyncio.sleep(INTERVAL_SEC)
 
