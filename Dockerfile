@@ -38,7 +38,10 @@ ENV PATH=/root/.local/bin:$PATH
 COPY proto/ ./proto/
 
 # Copy application code
-COPY agent/ ./agent/
+COPY ./core ./core
+COPY ./grpc_method ./grpc_method
+COPY ./topology ./topology
+COPY ./network ./network 
 
 # Create topology directory for mounting
 RUN mkdir -p /topology
@@ -54,4 +57,4 @@ ENV TOPOLOGY_FILE=/topology/topology.json
 EXPOSE 50051
 
 # Run the application
-CMD ["python", "-m", "agent.agent"]
+CMD ["python", "-m", "core.agent"]
