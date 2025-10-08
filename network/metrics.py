@@ -8,14 +8,14 @@ PING_REGEX = re.compile(r"= ([\d\.]+)/([\d\.]+)/([\d\.]+)/([\d\.]+) ms")
 async def ping_neighbor(neighbor_hostname: str) -> dict:
     try:
         import os
-        args = ["ping", "-c", "4", neighbor_hostname] if os.name != "nt" else ["ping", "-n", "4", neighbor_hostname]
+        args = ["ping", "-c", "2", neighbor_hostname] if os.name != "nt" else ["ping", "-n", "2", neighbor_hostname]
         proc = await asyncio.create_subprocess_exec(
             *args,
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE
         )
         try:
-            stdout, stderr = await asyncio.wait_for(proc.communicate(), timeout=10)
+            stdout, stderr = await asyncio.wait_for(proc.communicate(), timeout=3)
         except asyncio.TimeoutError:
             proc.kill()
             await proc.communicate()

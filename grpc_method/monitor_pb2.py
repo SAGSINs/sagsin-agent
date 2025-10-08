@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rmonitor.proto\x12\x07monitor\"\x9a\x01\n\nLinkMetric\x12\x13\n\x0bneighbor_id\x18\x01 \x01(\t\x12\x10\n\x08\x64\x65lay_ms\x18\x02 \x01(\x01\x12\x11\n\tjitter_ms\x18\x03 \x01(\x01\x12\x11\n\tloss_rate\x18\x04 \x01(\x01\x12\x16\n\x0e\x62\x61ndwidth_mbps\x18\x05 \x01(\x01\x12\x11\n\tavailable\x18\x06 \x01(\x08\x12\x14\n\x0cqueue_length\x18\x07 \x01(\x05\"T\n\x10HeartbeatRequest\x12\n\n\x02ip\x18\x01 \x01(\t\x12\x10\n\x08hostname\x18\x02 \x01(\t\x12\"\n\x05links\x18\x03 \x03(\x0b\x32\x13.monitor.LinkMetric\"5\n\x11HeartbeatResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t2S\n\x0bNodeMonitor\x12\x44\n\tHeartbeat\x12\x19.monitor.HeartbeatRequest\x1a\x1a.monitor.HeartbeatResponse(\x01\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rmonitor.proto\x12\x07monitor\"\x9a\x01\n\nLinkMetric\x12\x13\n\x0bneighbor_id\x18\x01 \x01(\t\x12\x10\n\x08\x64\x65lay_ms\x18\x02 \x01(\x01\x12\x11\n\tjitter_ms\x18\x03 \x01(\x01\x12\x11\n\tloss_rate\x18\x04 \x01(\x01\x12\x16\n\x0e\x62\x61ndwidth_mbps\x18\x05 \x01(\x01\x12\x11\n\tavailable\x18\x06 \x01(\x08\x12\x14\n\x0cqueue_length\x18\x07 \x01(\x05\"]\n\nNodeMetric\x12\x10\n\x08\x63pu_load\x18\x01 \x01(\x01\x12\x11\n\tjitter_ms\x18\x02 \x01(\x01\x12\x11\n\tqueue_len\x18\x03 \x01(\x05\x12\x17\n\x0fthroughput_mbps\x18\x04 \x01(\x01\"\x7f\n\x10HeartbeatRequest\x12\n\n\x02ip\x18\x01 \x01(\t\x12\x10\n\x08hostname\x18\x02 \x01(\t\x12\"\n\x05links\x18\x03 \x03(\x0b\x32\x13.monitor.LinkMetric\x12)\n\x0cnode_metrics\x18\x04 \x01(\x0b\x32\x13.monitor.NodeMetric\"5\n\x11HeartbeatResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t2S\n\x0bNodeMonitor\x12\x44\n\tHeartbeat\x12\x19.monitor.HeartbeatRequest\x1a\x1a.monitor.HeartbeatResponse(\x01\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -33,10 +33,12 @@ if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
   _globals['_LINKMETRIC']._serialized_start=27
   _globals['_LINKMETRIC']._serialized_end=181
-  _globals['_HEARTBEATREQUEST']._serialized_start=183
-  _globals['_HEARTBEATREQUEST']._serialized_end=267
-  _globals['_HEARTBEATRESPONSE']._serialized_start=269
-  _globals['_HEARTBEATRESPONSE']._serialized_end=322
-  _globals['_NODEMONITOR']._serialized_start=324
-  _globals['_NODEMONITOR']._serialized_end=407
+  _globals['_NODEMETRIC']._serialized_start=183
+  _globals['_NODEMETRIC']._serialized_end=276
+  _globals['_HEARTBEATREQUEST']._serialized_start=278
+  _globals['_HEARTBEATREQUEST']._serialized_end=405
+  _globals['_HEARTBEATRESPONSE']._serialized_start=407
+  _globals['_HEARTBEATRESPONSE']._serialized_end=460
+  _globals['_NODEMONITOR']._serialized_start=462
+  _globals['_NODEMONITOR']._serialized_end=545
 # @@protoc_insertion_point(module_scope)
