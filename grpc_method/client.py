@@ -67,7 +67,7 @@ async def stream_heartbeat(stub, stop_event, neighbors):
 
 async def run_agent(stop_event, neighbors):
     GRPC_TARGET = os.getenv("GRPC_TARGET", "localhost:50051")
-
+    print(f"Connecting to gRPC server at {GRPC_TARGET}")
     options = [
         ("grpc.keepalive_time_ms", 10000),
         ("grpc.keepalive_timeout_ms", 5000),
