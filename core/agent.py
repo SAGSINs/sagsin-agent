@@ -22,9 +22,6 @@ async def main() -> None:
     TOPOLOGY_FILE = os.getenv("TOPOLOGY_FILE", "/topology/topology.json")
     topology = load_topology(TOPOLOGY_FILE)
     neighbors = get_neighbors(HOST_NAME, topology)
-    print(f"Node: {HOST_NAME}")
-    print(f"Neighbors: {neighbors}")
-    print(f"Total neighbors: {len(neighbors)}")
     await run_agent(stop_event, neighbors)
 
 if __name__ == "__main__":

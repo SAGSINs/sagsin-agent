@@ -20,6 +20,8 @@ async def heartbeat_generator(stop_event, neighbors):
     local_ip = get_local_ip()
     HOST_NAME = os.getenv("HOST_NAME", "unknown")
     INTERVAL_SEC = float(os.getenv("INTERVAL_SEC", "5.0"))
+    LAT = float(os.getenv("LAT", "0.0"))
+    LNG = float(os.getenv("LNG", "0.0"))
 
     while not stop_event.is_set():
         start_time = asyncio.get_event_loop().time()
@@ -40,6 +42,8 @@ async def heartbeat_generator(stop_event, neighbors):
                 hostname=HOST_NAME,
                 links=links,
                 node_metrics=node_metrics,
+                lat=LAT,
+                lng=LNG
             )
 
             elapsed_time = asyncio.get_event_loop().time() - start_time

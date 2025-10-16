@@ -28,6 +28,8 @@ message HeartbeatRequest {
   string hostname = 2;
   repeated LinkMetric links = 3;
   NodeMetric node_metrics = 4;
+  double lat = 5;
+  double lng = 6;
 }
 
 message HeartbeatResponse {
