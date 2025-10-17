@@ -48,7 +48,6 @@ async def heartbeat_generator(stop_event, neighbors):
 
             elapsed_time = asyncio.get_event_loop().time() - start_time
             sleep_time = max(0, INTERVAL_SEC - elapsed_time)
-            print(f"[DEBUG] Processing took {elapsed_time:.2f}s, sleeping for {sleep_time:.2f}s")
             await asyncio.sleep(sleep_time)
         except Exception as e:
             print(f"[WARN] Error in heartbeat generator: {e}")
@@ -59,8 +58,7 @@ async def heartbeat_generator(stop_event, neighbors):
 
 async def stream_heartbeat(stub, stop_event, neighbors):
     try:
-        response = await stub.Heartbeat(heartbeat_generator(stop_event, neighbors))
-        print(f"[INFO] Server responded: {response}")
+       await stub.Heartbeat(heartbeat_generator(stop_event, neighbors))
     except grpc.aio.AioRpcError as e:
         print(f"[ERROR] gRPC stream closed: {e.details()}")
     except asyncio.CancelledError:
@@ -84,7 +82,6 @@ async def run_agent(stop_event, neighbors):
                 stub = NodeMonitorStub(channel)
 
                 await stream_heartbeat(stub, stop_event, neighbors)
-
         except grpc.aio.AioRpcError as e:
             print(f"[WARN] gRPC connection error: {e.details()}")
             await asyncio.sleep(2)

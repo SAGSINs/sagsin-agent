@@ -65,7 +65,6 @@ async def measure_links(neighbors: list) -> list:
         if isinstance(result, dict):
             links.append(result)
         else:
-            print(f"Error measuring link to {neighbors[i]}: {result}")
             links.append({
                 "neighbor_id": neighbors[i],
                 "delay_ms": 0.0,
