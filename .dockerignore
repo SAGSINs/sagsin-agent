@@ -1,76 +1,64 @@
-# Dockerignore for better build performance
-.git
-.github
-.venv
-*.log
-__pycache__
-*.pyc
-*.pyo
-*.pyd
-.pytest_cache
-.coverage
-.env
-*.env
-README.md
-.gitignore
-run_agent.bat
-
 # Python
-__pycache__
-*.pyc
-*.pyo
-*.pyd
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
 .Python
-env
-venv
-.venv
-pip-log.txt
-pip-delete-this-directory.txt
-.tox
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.log
-.mypy_cache
-.pytest_cache
-.hypothesis
 *.egg-info/
-.ipynb_checkpoints
+dist/
+build/
 
-# Node.js
-node_modules
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.npm
-.yarn
-
-# Environment files
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# OS generated files
-.DS_Store
-Thumbs.db
-*.swp
-*.swo
-*~
+# Virtual environments
+venv/
+env/
+ENV/
 
 # IDE
-.vscode
-.idea
-*.tmp
+.vscode/
+.idea/
+*.swp
+*.swo
 
-# Build artifacts
-build/
-dist/
+# Git
+.git/
+.gitignore
+
+# Documentation - keep README in both agents
+*.md
+!metric-agent/README.md
+!file-agent/README.md
+!README.md
 
 # Logs
 *.log
-sagsin_agent.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Development files
+metric-agent/.dockerignore
+metric-agent/__pycache__/
+metric-agent/**/__pycache__/
+file-agent/.dockerignore
+file-agent/__pycache__/
+file-agent/**/__pycache__/
+
+# File agent runtime directories (will be mounted as volumes)
+file-agent/send-file/*
+!file-agent/send-file/.gitkeep
+file-agent/receive-file/*
+!file-agent/receive-file/.gitkeep
+file-agent/relay-cache/*
+!file-agent/relay-cache/.gitkeep
+
+# Environment files
+.env
+file-agent/.env
+
+# Docker files (not needed in image)
+docker-compose.yml
+Dockerfile.multi-agent
+
+# GitHub workflows
+.github/

@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package heuristic;
+
+message AlgorithmRunRequest {
+  string algo = 1;     
+  string src = 2;      
+  string dst = 3;   
+}
+
+message AlgorithmRunStart {
+  string algo = 1;
+  string src = 2;
+  string dst = 3;
+}
+
+message AlgorithmStep {
+  string algo = 1;
+  int32 step = 2;
+  string action = 3;  
+  string node = 4;
+  string from_node = 5;
+  string to_node = 6;
+  int32 open_size = 7;
+  double g = 8;
+  double f = 9;
+  double dist = 10;
+  repeated string path = 11;
+}
+
+message RouteResult {
+  repeated string path = 1;
+  double total_weight = 2;
+  double total_delay_ms = 3;
+  double total_jitter_ms = 4;
+  double avg_loss_rate = 5;
+  double min_bandwidth_mbps = 6;
+  int32 hop_count = 7;
+  double stability_score = 8;
+}
+
+message AlgorithmComplete {
+  string algo = 1;
+  string src = 2;
+  string dst = 3;
+  RouteResult result = 4;  
+}
+
+message AlgorithmStreamEvent {
+  oneof event {
+    AlgorithmRunStart run_start = 1;
+    AlgorithmStep step = 2;
+    AlgorithmComplete complete = 3;
+  }
+}
+
+service AlgorithmStreamService {
+  rpc RunAlgorithm(AlgorithmRunRequest) returns (stream AlgorithmStreamEvent);
+}
