@@ -41,9 +41,23 @@ def get_queue_length() -> int:
         if not active_iface:
             return 0
 
-        with open(f"/sys/class/net/{active_iface}/tx_queue_len", "r") as f:
-            return int(f.read().strip())
-    except Exception:
+        result = subprocess.run(
+            ["tc", "-s", "qdisc", "show", "dev", active_iface],
+            capture_output=True,
+            text=True
+        )
+        output = result.stdout
+
+        match = re.search(r"backlog\s+(\d+)b\s+(\d+)p", output)
+        if match:
+            bytes_in_queue = int(match.group(1))
+            packets_in_queue = int(match.group(2))
+            return packets_in_queue
+
+        return 0
+
+    except Exception as e:
+        print(f"[WARN] Error in get_queue_length: {e}")
         return 0
 
 def get_throughput_mbps(interval: float = 0.1) -> float:
