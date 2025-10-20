@@ -68,11 +68,11 @@ In another terminal (or on source node):
 
 ```bash
 # Place file in send-file/ directory
-echo "Hello from Hanoi!" > file-agent/send-file/a.txt
+echo "Hello from Hanoi!" > send-file/a.txt
 
 # Send to destination
 python file-agent/main.py send message.txt ship_tokyo --algo astar
-python file-agent/main.py send a.txt ship_tokyo --algo astar
+python main.py send a.txt ship_tokyo --algo astar
 python file-agent/main.py send a.txt drone_bejing --algo dijkstra
 ```
 

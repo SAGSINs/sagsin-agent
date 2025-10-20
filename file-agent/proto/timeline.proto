@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package timeline;
+
+service TimelineService {
+  // Stream timeline updates from file agents
+  rpc StreamTimelineUpdates(stream TimelineUpdate) returns (TimelineResponse);
+  
+  // Single timeline update
+  rpc SendTimelineUpdate(TimelineUpdate) returns (TimelineResponse);
+}
+
+message TimelineUpdate {
+  string transfer_id = 1;  // UUID của file transfer
+  string hostname = 2;      // Node name từ env
+  string timestamp = 3;     // ISO 8601 timestamp
+  Status status = 4;        // DONE hoặc PENDING
+}
+
+enum Status {
+  PENDING = 0;
+  DONE = 1;
+}
+
+message TimelineResponse {
+  bool success = 1;
+  string message = 2;
+}

@@ -9,6 +9,7 @@ from .utils import (
     get_timestamp, HOST_NAME, NODE_HOST, NODE_PORT, CHUNK_SIZE
 )
 from .sender import FileSender
+from .timeline_client import get_timeline_client
 
 logger = get_logger('agent.node_agent')
 
@@ -150,6 +151,10 @@ class NodeAgent:
             # Send ACK
             self._send_ack(client_socket, True, "File received successfully")
             
+            # Send timeline update
+            status = 'DONE' if is_destination else 'PENDING'
+            self._send_timeline_update(transfer_id, status)
+            
             # If not destination, relay to next hop
             if not is_destination:
                 logger.info(f"🔄 Relaying to next hop...")
@@ -169,7 +174,6 @@ class NodeAgent:
                     logger.error(f"❌ Relay failed")
             else:
                 logger.info(f"🎯 Final destination reached. File saved to {save_path}")
-                self._report_transfer_received(transfer_id, filename, route)
         
         except Exception as e:
             logger.error(f"❌ Error handling client: {e}")
@@ -196,8 +200,19 @@ class NodeAgent:
         ack_json = json.dumps(ack).encode('utf-8')
         sock.sendall(ack_json)
     
-    def _report_transfer_received(self, transfer_id: str, filename: str, route: list):
-        pass
+    def _send_timeline_update(self, transfer_id: str, status: str):
+        """Send timeline update to backend via gRPC"""
+        try:
+            timeline_client = get_timeline_client()
+            success = timeline_client.send_update(
+                transfer_id=transfer_id,
+                hostname=HOST_NAME,
+                status=status
+            )
+            if not success:
+                logger.warning(f"⚠️  Failed to send timeline update for {transfer_id}")
+        except Exception as e:
+            logger.error(f"❌ Error sending timeline update: {e}")
 
 # Singleton
 _agent = None

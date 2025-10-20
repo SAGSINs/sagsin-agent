@@ -59,6 +59,7 @@ ENV TOPOLOGY_FILE=/topology/topology.json
 ENV NODE_HOST=0.0.0.0
 ENV NODE_PORT=7000
 ENV HEURISTIC_ADDR=192.168.100.3:50052
+ENV TIMELINE_BACKEND_URL=192.168.100.10:50053
 
 # Copy entrypoint script
 COPY docker-entrypoint.sh /usr/local/bin/
