@@ -8,23 +8,18 @@ import os
 logger = get_logger('agent.timeline_client')
 
 class TimelineClient:
-    """gRPC client to send timeline updates to backend"""
-    
     def __init__(self):
         self.backend_url = os.getenv('TIMELINE_BACKEND_URL', 'localhost:50053')
-        print( f"Timeline backend URL: {self.backend_url}" )
         self.channel = None
         self.stub = None
         
     def connect(self):
-        """Establish gRPC connection"""
         try:
             self.channel = grpc.insecure_channel(self.backend_url)
             self.stub = timeline_pb2_grpc.TimelineServiceStub(self.channel)
-            logger.info(f"✅ Connected to timeline service at {self.backend_url}")
         except Exception as e:
-            logger.error(f"❌ Failed to connect to timeline service: {e}")
-    
+            logger.error(f"Failed to connect to timeline service: {e}")
+
     def send_update(
         self, 
         transfer_id: str, 
@@ -35,7 +30,7 @@ class TimelineClient:
             self.connect()
         
         if not self.stub:
-            logger.error("❌ No connection to timeline service")
+            logger.error("No connection to timeline service")
             return False
         
         try:
@@ -50,16 +45,16 @@ class TimelineClient:
             
             self.stub.SendTimelineUpdate(update)      
         except grpc.RpcError as e:
-            logger.error(f"❌ gRPC error sending timeline update: {e.code()} - {e.details()}")
+            logger.error(f"gRPC error sending timeline update: {e.code()} - {e.details()}")
             return False
         except Exception as e:
-            logger.error(f"❌ Error sending timeline update: {e}")
+            logger.error(f"Error sending timeline update: {e}")
             return False
     
     def close(self):
         if self.channel:
             self.channel.close()
-            logger.info("📴 Timeline client disconnected")
+            logger.info("Timeline client disconnected")
 
 _timeline_client = None
 

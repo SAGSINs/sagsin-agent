@@ -80,7 +80,6 @@ async def collect_node_metrics() -> Dict[str, Any]:
         loop.run_in_executor(executor, get_throughput_mbps, 0.1),
     )
     cpu, jitter, queue, throughput = results
-    print(f"[DEBUG] Node Metrics - CPU: {cpu}%, Jitter: {jitter}ms, Queue: {queue}, Throughput: {throughput}Mbps")
     return {
         "cpu_load": cpu,
         "jitter_ms": jitter,

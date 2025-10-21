@@ -5,16 +5,14 @@ from agent import get_node_agent, get_file_sender, get_logger
 logger = get_logger('main')
 
 def cmd_listen():
-    """Start node agent to listen for incoming files"""
-    logger.info("🚀 Starting node agent in listen mode...")
     agent = get_node_agent()
     try:
         agent.start()
     except KeyboardInterrupt:
-        logger.info("\n⚠️  Interrupt received in main")
+        logger.info("\nInterrupt received in main")
     finally:
         agent.stop()
-        logger.info("👋 Goodbye!")
+        logger.info("Goodbye!")
 
 def cmd_send(filename: str, destination: str, algorithm: str = 'astar'):
     logger.info(f"Sending file: {filename} → {destination} ({algorithm})")
@@ -23,10 +21,10 @@ def cmd_send(filename: str, destination: str, algorithm: str = 'astar'):
     success = sender.send_file_to_destination(filename, destination, algorithm)
     
     if success:
-        logger.info("✅ File transfer initiated successfully")
+        logger.info("File transfer initiated successfully")
         sys.exit(0)
     else:
-        logger.error("❌ File transfer failed")
+        logger.error("File transfer failed")
         sys.exit(1)
 
 def main():
@@ -36,10 +34,8 @@ def main():
     
     subparsers = parser.add_subparsers(dest='command', help='Commands')
     
-    # Listen command
     parser_listen = subparsers.add_parser('listen', help='Start listening for incoming files')
     
-    # Send command
     parser_send = subparsers.add_parser('send', help='Send a file to destination')
     parser_send.add_argument('filename', help='Filename in send-file directory')
     parser_send.add_argument('destination', help='Destination node name')

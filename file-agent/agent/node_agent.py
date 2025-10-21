@@ -14,10 +14,6 @@ from .timeline_client import get_timeline_client
 logger = get_logger('agent.node_agent')
 
 class NodeAgent:
-    """
-    TCP server that receives files and relays them to next hop
-    """
-    
     def __init__(
         self, 
         host: str = NODE_HOST, 
@@ -38,24 +34,21 @@ class NodeAgent:
         self.server_socket = None
     
     def start(self):
-        """Start listening for incoming file transfers"""
         self.running = True
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.server_socket.settimeout(1.0)  # Set timeout to allow checking self.running
+        self.server_socket.settimeout(1.0) 
         
         try:
             self.server_socket.bind((self.host, self.port))
             self.server_socket.listen(5)
-            logger.info(f"🎧 Listening on {self.host}:{self.port} (Node: {HOST_NAME})")
         except OSError as e:
-            logger.error(f"❌ Failed to bind to {self.host}:{self.port}: {e}")
+            logger.error(f"Failed to bind to {self.host}:{self.port}: {e}")
             return
 
         while self.running:
             try:
                 client_socket, client_address = self.server_socket.accept()
-                logger.info(f"📥 Connection from {client_address}")
 
                 thread = threading.Thread(
                     target=self._handle_client,
@@ -65,29 +58,26 @@ class NodeAgent:
                 thread.start()
             
             except socket.timeout:
-                # Timeout is normal, just check self.running and continue
                 continue
             except KeyboardInterrupt:
-                logger.info("\n⚠️  Received interrupt signal")
+                logger.info("\nReceived interrupt signal")
                 break
             except Exception as e:
                 if self.running:
-                    logger.error(f"❌ Error accepting connection: {e}")
-        
+                    logger.error(f"Error accepting connection: {e}")
+
         self.stop()
     
     def stop(self):
-        """Stop the server gracefully"""
         if not self.running:
             return
         
-        logger.info("🛑 Stopping node agent...")
         self.running = False
         
         if self.server_socket:
             try:
                 self.server_socket.close()
-                logger.info("✅ Server socket closed")
+                logger.info("Server socket closed")
             except Exception as e:
                 logger.error(f"Error closing server socket: {e}")
     
@@ -100,7 +90,6 @@ class NodeAgent:
             
             metadata_len = struct.unpack('!I', metadata_len_bytes)[0]
             
-            # Receive metadata
             metadata_bytes = self._recv_exact(client_socket, metadata_len)
             if not metadata_bytes:
                 logger.error("Failed to receive metadata")
@@ -117,11 +106,9 @@ class NodeAgent:
 
             is_destination = current_index >= len(route) - 1
             
-            # Save directory
             save_dir = self.receive_dir if is_destination else self.relay_dir
             save_path = os.path.join(save_dir, filename)
             
-            # Receive file data
             bytes_received = 0
             with open(save_path, 'wb') as f:
                 while bytes_received < file_size:
@@ -131,22 +118,13 @@ class NodeAgent:
                         break
                     f.write(chunk)
                     bytes_received += len(chunk)
-                    
-                    # Progress
-                    if bytes_received % (CHUNK_SIZE * 100) == 0:
-                        progress = (bytes_received / file_size) * 100
-                        logger.info(f"   Progress: {progress:.1f}%")
-            
-            logger.info(f"✅ File received: {bytes_received} bytes")
-            
+
             # Verify MD5
             actual_md5 = calculate_md5(save_path)
             if actual_md5 != expected_md5:
-                logger.error(f"❌ MD5 mismatch! Expected {expected_md5}, got {actual_md5}")
+                logger.error(f"MD5 mismatch! Expected {expected_md5}, got {actual_md5}")
                 self._send_ack(client_socket, False, "MD5 verification failed")
                 return
-            
-            logger.info(f"✅ MD5 verified: {actual_md5}")
             
             # Send ACK
             self._send_ack(client_socket, True, "File received successfully")
@@ -157,7 +135,6 @@ class NodeAgent:
             
             # If not destination, relay to next hop
             if not is_destination:
-                logger.info(f"🔄 Relaying to next hop...")
                 next_success = self.sender._send_to_next_hop(
                     file_path=save_path,
                     filename=filename,
@@ -167,16 +144,15 @@ class NodeAgent:
                 )
                 
                 if next_success:
-                    logger.info(f"✅ Relay successful")
-                    # Clean up relay cache
+                    logger.info(f"Relay successful")
                     os.remove(save_path)
                 else:
-                    logger.error(f"❌ Relay failed")
+                    logger.error(f"Relay failed")
             else:
-                logger.info(f"🎯 Final destination reached. File saved to {save_path}")
+                logger.info(f"Final destination reached. File saved to {save_path}")
         
         except Exception as e:
-            logger.error(f"❌ Error handling client: {e}")
+            logger.error(f"Error handling client: {e}")
             import traceback
             traceback.print_exc()
         finally:
@@ -201,24 +177,20 @@ class NodeAgent:
         sock.sendall(ack_json)
     
     def _send_timeline_update(self, transfer_id: str, status: str):
-        """Send timeline update to backend via gRPC"""
         try:
             timeline_client = get_timeline_client()
-            success = timeline_client.send_update(
+            timeline_client.send_update(
                 transfer_id=transfer_id,
                 hostname=HOST_NAME,
                 status=status
             )
-            if not success:
-                logger.warning(f"⚠️  Failed to send timeline update for {transfer_id}")
         except Exception as e:
-            logger.error(f"❌ Error sending timeline update: {e}")
+            logger.error(f"Error sending timeline update: {e}")
 
 # Singleton
 _agent = None
 
 def get_node_agent() -> NodeAgent:
-    """Get or create singleton node agent"""
     global _agent
     if _agent is None:
         _agent = NodeAgent()
