@@ -95,10 +95,6 @@ PROPAGATION_DELAYS = {
 _topology_cache = None
 
 def load_topology() -> dict:
-    """
-    Load topology.json from mounted volume
-    Returns topology data with nodes GPS coordinates
-    """
     global _topology_cache
     if _topology_cache is not None:
         return _topology_cache
@@ -116,10 +112,6 @@ def load_topology() -> dict:
 
 
 def get_node_info(hostname: str) -> dict:
-    """
-    Get node information from topology.json
-    Returns dict with lat, lng, weather, type
-    """
     topology = load_topology()
     for node in topology.get("nodes", []):
         if node.get("id") == hostname:
@@ -130,7 +122,6 @@ def get_node_info(hostname: str) -> dict:
                 "type": node.get("type", "unknown")
             }
     
-    # Fallback to env vars if not in topology
     return {
         "lat": float(os.getenv("LAT", "0")),
         "lng": float(os.getenv("LNG", "0")),
@@ -140,10 +131,6 @@ def get_node_info(hostname: str) -> dict:
 
 
 def haversine_distance(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
-    """
-    Calculate great-circle distance between two GPS coordinates using Haversine formula
-    Returns distance in kilometers
-    """
     lat1_rad = math.radians(lat1)
     lon1_rad = math.radians(lon1)
     lat2_rad = math.radians(lat2)
@@ -169,10 +156,6 @@ def get_node_type(hostname: str) -> str:
 
 
 def get_weather_condition(hostname: str = None) -> str:
-    """
-    Get weather condition for a node
-    Priority: 1) topology.json, 2) ENV var, 3) default "clear"
-    """
     if hostname:
         node_info = get_node_info(hostname)
         weather = node_info.get("weather", "").lower()
