@@ -107,7 +107,12 @@ class NodeAgent:
             is_destination = current_index >= len(route) - 1
             
             save_dir = self.receive_dir if is_destination else self.relay_dir
-            save_path = os.path.join(save_dir, filename)
+            # Add transfer_id prefix for final destination
+            if is_destination:
+                final_filename = f"{transfer_id}-{filename}"
+            else:
+                final_filename = filename
+            save_path = os.path.join(save_dir, final_filename)
             
             bytes_received = 0
             with open(save_path, 'wb') as f:
